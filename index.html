@@ -1,85 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Gaming Website</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Simple Calculator</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    .calculator {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .display {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 10px;
+      text-align: right;
+      padding: 10px;
+      font-size: 24px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      gap: 10px;
+    }
+    button {
+      height: 60px;
+      font-size: 20px;
+      border: none;
+      border-radius: 8px;
+      background: #e0e0e0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #d0d0d0;
+    }
+    .operator {
+      background: #f9a825;
+      color: white;
+    }
+    .equal {
+      background: #43a047;
+      color: white;
+      grid-column: span 2;
+    }
+    .clear {
+      background: #e53935;
+      color: white;
+      grid-column: span 2;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Gaming World</h1>
-        <nav>
-            <ul>
-                <li><a href="https://raw.githubusercontent.com/MOHDZIKRANKASSAR/MY-FIRST-SITE/main/IMG_20240723_133130.jpg"> 100px 100px Home</a></li>
-                <li><a href="#games">Games</a></li>
-                <li><a href="#news">News</a></li>
-                <li><a href="#community">Community</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <section id="home">
-            <h2>Home</h2>
-            <link ref="https://cdn1.epicgames.com/offer/3ddd6a590da64e3686042d108968a6b2/EGS_GodofWar_SantaMonicaStudio_S2_1200x1600-fbdf3cbc2980749091d52751ffabb7b7_1200x1600-fbdf3cbc2980749091d52751ffabb7b7" href="https://cdn1.epicgames.com/offer/3ddd6a590da64e3686042d108968a6b2/EGS_GodofWar_SantaMonicaStudio_S2_1200x1600-fbdf3cbc2980749091d52751ffabb7b7_1200x1600-fbdf3cbc2980749091d52751ffabb7b7"
-        </section>
 
-        <section id="games">
-            <h2>Games</h2>
-            <div class="game">
-                <img src="https://raw.githubusercontent.com/MOHDZIKRANKASSAR/MY-FIRST-SITE/main/IMG_20240723_133130.jpg" alt="Game 1">
-                <h3>Game Title 1</h3>
-                <p>A brief description of Game Title 1. An exciting adventure awaits!</p>
-            </div>tu
-            <div class="game">
-                <img src="https://cdn1.epicgames.com/offer/3ddd6a590da64e3686042d108968a6b2/EGS_GodofWar_SantaMonicaStudio_S2_1200x1600-fbdf3cbc2980749091d52751ffabb7b7_1200x1600-fbdf3cbc2980749091d52751ffabb7b7" alt="Game 2">
-                <h3>Game Title 2</h3>
-                <p>A brief description of Game Title 2. Battle your way to victory!</p>
-            </div>
-            <div class="game">
-                <img src="https://cdn1.epicgames.com/offer/3ddd6a590da64e3686042d108968a6b2/EGS_GodofWar_SantaMonicaStudio_S2_1200x1600-fbdf3cbc2980749091d52751ffabb7b7_1200x1600-fbdf3cbc2980749091d52751ffabb7b7" alt="Game 3">
-                <h3>Game Title 3</h3>
-                <p>A brief description of Game Title 3. Strategy and skill combined!</p>
-            </div>
-            <!-- Add more game details here -->
-        </section>
+<div class="calculator">
+  <input type="text" class="display" id="display" disabled>
+  <div class="buttons">
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button class="operator" onclick="append('/')">÷</button>
 
-        <section id="news">
-            <h2>News</h2>
-            <p>Stay updated with the latest gaming news, reviews, and releases.</p>
-            <!-- Add more details or links to news articles here -->
-        </section>
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button class="operator" onclick="append('*')">×</button>
 
-        <section id="community">
-            <h2>Community</h2>
-            <p>Join our community to connect with fellow gamers, share tips, and participate in events.</p>
-            <!-- Add more details or links to community forums here -->
-        </section>
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button class="operator" onclick="append('-')">−</button>
 
-        <section id="contact">
-            <h2>Contact</h2>
-            <p>Have questions or feedback? Reach out to us here.</p>
-        </section>
-    </main>
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+    <button class="operator" onclick="append('+')">+</button>
 
-    <footer>
-        <p>&copy; 2024 My Gaming World. All rights reserved.</p>
-    </footer>
-    <section id="resume">
-    <h2>Resume Building</h2>
-    <p>Build and review your resume with our expert tips and templates.</p>
-    <form action="/submit_resume" method="post" enctype="multipart/form-data">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        <label for="resume">Upload Resume:</label>
-        <input type="file" id="resume" name="resume" required><br><br>
-        <button type="submit">Submit</button>
-    </form>
-    </section>
-        backgroundImg.src = 'https://i.gifer.com/Maac.gif';// New background image
+    <button class="clear" onclick="clearDisplay()">C</button>
+  </div>
+</div>
+
+<script>
+  const display = document.getElementById('display');
+
+  function append(char) {
+    display.value += char;
+  }
+
+  function clearDisplay() {
+    display.value = '';
+  }
+
+  function calculate() {
+    try {
+      display.value = eval(display.value);
+    } catch (e) {
+      display.value = 'Error';
+    }
+  }
+</script>
+
 </body>
 </html>
