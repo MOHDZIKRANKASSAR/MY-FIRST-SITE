@@ -2,135 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tic Tac Toe</title>
+  <title>Car Dodger Game</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      background: #000;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
-      background: #1e1e1e;
-      color: #fff;
-      font-family: Arial, sans-serif;
     }
-
-    h1 {
-      color: #00bcd4;
+    #game {
+      width: 400px;
+      height: 600px;
+      background: #333;
+      position: relative;
+      overflow: hidden;
+      border: 5px solid #fff;
     }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 5px;
-    }
-
-    .cell {
-      width: 100px;
+    #player {
+      width: 50px;
       height: 100px;
-      background-color: #333;
-      font-size: 48px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+      background: red;
+      position: absolute;
+      bottom: 20px;
+      left: 175px;
       border-radius: 8px;
-      user-select: none;
     }
-
-    .cell:hover {
-      background-color: #444;
+    .enemy {
+      width: 50px;
+      height: 100px;
+      background: yellow;
+      position: absolute;
+      top: -120px;
+      border-radius: 8px;
     }
-
-    .status {
-      margin-top: 20px;
-      font-size: 24px;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #00bcd4;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0097a7;
+    #score {
+      position: absolute;
+      color: #fff;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Tic Tac Toe</h1>
-  <div class="board" id="board"></div>
-  <div class="status" id="status">Player X's turn</div>
-  <button onclick="resetGame()">Restart Game</button>
+<div id="game">
+  <div id="score">Score: 0</div>
+  <div id="player"></div>
+</div>
 
-  <script>
-    const board = document.getElementById("board");
-    const status = document.getElementById("status");
-    let cells = Array(9).fill("");
-    let currentPlayer = "X";
-    let gameOver = false;
+<script>
+  const game = document.getElementById("game");
+  const player = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+  let score = 0;
 
-    function createBoard() {
-      board.innerHTML = "";
-      cells.forEach((cell, index) => {
-        const div = document.createElement("div");
-        div.classList.add("cell");
-        div.dataset.index = index;
-        div.textContent = cell;
-        div.addEventListener("click", handleClick);
-        board.appendChild(div);
-      });
+  let playerPos = 175;
+  let leftPressed = false;
+  let rightPressed = false;
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") leftPressed = true;
+    if (e.key === "ArrowRight") rightPressed = true;
+  });
+
+  document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowLeft") leftPressed = false;
+    if (e.key === "ArrowRight") rightPressed = false;
+  });
+
+  function movePlayer() {
+    if (leftPressed && playerPos > 0) {
+      playerPos -= 5;
     }
+    if (rightPressed && playerPos < 350) {
+      playerPos += 5;
+    }
+    player.style.left = playerPos + "px";
+  }
 
-    function handleClick(e) {
-      const index = e.target.dataset.index;
-      if (cells[index] === "" && !gameOver) {
-        cells[index] = currentPlayer;
-        e.target.textContent = currentPlayer;
-        if (checkWinner()) {
-          status.textContent = `Player ${currentPlayer} wins!`;
-          gameOver = true;
-        } else if (cells.every(cell => cell !== "")) {
-          status.textContent = "It's a draw!";
-          gameOver = true;
-        } else {
-          currentPlayer = currentPlayer === "X" ? "O" : "X";
-          status.textContent = `Player ${currentPlayer}'s turn`;
-        }
+  function spawnEnemy() {
+    const enemy = document.createElement("div");
+    enemy.classList.add("enemy");
+    enemy.style.left = Math.floor(Math.random() * 350) + "px";
+    game.appendChild(enemy);
+    moveEnemy(enemy);
+  }
+
+  function moveEnemy(enemy) {
+    let top = -100;
+    const interval = setInterval(() => {
+      top += 5;
+      enemy.style.top = top + "px";
+
+      if (top > 600) {
+        clearInterval(interval);
+        enemy.remove();
+        score++;
+        scoreText.textContent = "Score: " + score;
       }
-    }
 
-    function checkWinner() {
-      const wins = [
-        [0,1,2], [3,4,5], [6,7,8],
-        [0,3,6], [1,4,7], [2,5,8],
-        [0,4,8], [2,4,6]
-      ];
-      return wins.some(combo => {
-        const [a, b, c] = combo;
-        return cells[a] && cells[a] === cells[b] && cells[a] === cells[c];
-      });
-    }
+      // Collision detection
+      const playerRect = player.getBoundingClientRect();
+      const enemyRect = enemy.getBoundingClientRect();
 
-    function resetGame() {
-      cells = Array(9).fill("");
-      currentPlayer = "X";
-      gameOver = false;
-      status.textContent = "Player X's turn";
-      createBoard();
-    }
+      if (
+        playerRect.left < enemyRect.left + enemyRect.width &&
+        playerRect.left + playerRect.width > enemyRect.left &&
+        playerRect.top < enemyRect.top + enemyRect.height &&
+        playerRect.height + playerRect.top > enemyRect.top
+      ) {
+        alert("Game Over! Your score: " + score);
+        window.location.reload();
+      }
+    }, 20);
+  }
 
-    createBoard();
-  </script>
+  setInterval(() => {
+    movePlayer();
+  }, 20);
+
+  setInterval(() => {
+    spawnEnemy();
+  }, 1000);
+</script>
 
 </body>
 </html>
